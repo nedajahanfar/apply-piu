@@ -21,5 +21,7 @@ async function getEuroPrice() {
   return euroPrice;
 }
 
-// Export it so index.js can import it
+
 module.exports = { getEuroPrice };
+
+//fixed

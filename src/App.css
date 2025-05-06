@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+@media (max-width: 767.98px) {
+  .mentorship-section-sm {
+    color: black !important;
+    padding: 2rem !important;
+  }
+
+  .mentorship-section-sm label,
+  .mentorship-section-sm p,
+  .mentorship-section-sm h2 {
+    color: black !important;
+  }
+}

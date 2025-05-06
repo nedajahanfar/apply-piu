@@ -1,0 +1,60 @@
+.nav-link-hover {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: #0056b3;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+
+.nav-mentorship-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-mentorship-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-arrow {
+  position: absolute;
+  color: #0056b3;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.9rem;
+  animation: bounce 1s ease-in-out infinite; 
+  z-index: 1000;
+}
+
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translate(-50%, 0); 
+  }
+  50% {
+    transform: translate(-50%, 10px);
+  }
+}
+
+
+@media (max-width: 768px) {
+  .nav-arrow {
+    display: none !important;
+  }
+}
+

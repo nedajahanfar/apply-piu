@@ -1,0 +1,97 @@
+{
+  "home": {
+    "title": "Apply PIU",
+    "subtitle": "Turning Dreams into Global Academic Success"
+  },
+  "navbar": {
+    "home": "Home",
+    "aboutUs": "About Us",
+    "services": "Services",
+    "bookAppointment": "Book an Appointment",
+    "bookMentorship": "Mentorship"
+  },
+  "about": {
+    "meetFounder": "Meet Our Founder",
+    "paragraph1": "With over 5 years of experience in international academic advising, our founder is passionate about guiding students toward achieving their study-abroad dreams.",
+    "paragraph2": "Having personally navigated the challenges of studying abroad, he understands the complexities of the application journey. His expertise spans multiple countries and education systems, ensuring every student receives tailored, practical guidance.",
+    "paragraph3": "His deep understanding of immigration processes and dedication to student success have helped hundreds confidently pursue their academic paths abroad."
+  },
+  "services": {
+    "title": "Our Services",
+    "resume": {
+      "title": "Resume Writing",
+      "description": "We create refined, professional resumes that showcase your strengths and make your academic and work history stand out."
+    },
+    "motivation": {
+      "title": "Motivation Letter Writing",
+      "description": "Engaging, personalized letters of motivation crafted to meet university standards and reflect your unique story."
+    },
+    "mentorship": {
+      "title": "Mentorship",
+      "description": "One-on-one mentoring to support you through academic planning, visa processes, and adapting to international student life."
+    },
+    "consulting": {
+      "title": "Educational Consulting",
+      "description": "Strategic, personalized consulting to help you choose the right academic programs and study destinations aligned with your goals."
+    },
+    "getStarted": "Get Started"
+  },
+ "testimonials": {
+  "title": "What Our Clients Say",
+  "farhad": {
+    "quote": "Amazing service! They guided me through every step of the process.",
+    "name": "Farhad Karimi"
+  },
+  "sheida": {
+    "quote": "Very professional and caring team. Highly recommend!",
+    "name": "Sheida Zibapasand"
+  },
+  "aida": {
+    "quote": "They helped me shape a compelling motivation letter. Thank you!",
+    "name": "Aida Jahan"
+  },
+  "ali": {
+    "quote": "Their mentorship was a turning point in my academic journey.",
+    "name": "Ali Rahimi"
+  },
+  "sara": {
+    "quote": "They helped me organize my documents perfectly for the application.",
+    "name": "Sara Ahmadi"
+  },
+  "reza": {
+    "quote": "Excellent consultation! I gained a lot of clarity and confidence.",
+    "name": "Reza Najafi"
+  }
+    },
+      "bookConsultation": {
+        "title": "Book a Consultation Appointment",
+        "description": "First, choose the type of consultation you prefer from the two available options: General (review of immigration path and destination based on goals) and Specialized (detailed review of resume, motivation letter, and application documents). Then, click the link below to proceed to the payment gateway, and after completing the payment, you will be redirected to the next page to select the date and time for your consultation.",
+        "selectConsultationType": "Please select your consultation type:",
+        "normalConsultation": "Normal Consultation",
+        "professionalConsultation": "Professional Consultation",
+        "selectedConsultation": "Selected: {{type}} Consultation",
+        "proceedToPayment": "Proceed to Payment",
+        "paymentSuccess": "Your payment was successful! Please proceed with scheduling your appointment.",
+        "paymentFailure": "Payment Failed. Please try again or contact support.",
+        "incorrectAmount": "You did not pay the correct amount. Please contact support."
+      },
+        "footer": {
+          "companyName": "Apply Piu Consultancy",
+          "description": "Your trusted partner for academic mentorship.",
+          "email": "Email: info@eshaghJahangiri.com",
+          "phone": "Phone: +39 351 565 3158",
+          "location": "Venice, Italy",
+          "copyright": "© 2025 Apply Piu Consultancy. All rights reserved.",
+          "websiteMadeBy": "Website Made By AEEland",
+          "socialMedia": {
+            "linkedin": "LinkedIn",
+            "instagram": "Instagram",
+            "facebook": "Facebook"
+          }
+        }
+      
+  }
+  
+
+
+  
