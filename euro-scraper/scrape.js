@@ -1,5 +1,5 @@
 // scrape.js
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 
 async function getEuroPrice() {
   const browser = await puppeteer.launch();
