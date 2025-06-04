@@ -9,6 +9,7 @@ import MentorshipForm from './forms/mentorship';
 import Footer from './components/footer';
 import ResumeRequestForm from './forms/resumeRequestForm';
 import MotivationLetterForm from './forms/motivationLetterForm';
+import SuccessPage from './forms/SuccessPage';
 import './i18n';
 
 
@@ -36,6 +37,8 @@ function App() {
         <Route path="/services/resume" element={<ResumeRequestForm />} />
         <Route path="/services/motivation-letter" element={<MotivationLetterForm />} />
         <Route path="/book-consultation" element={<BookAppointment />} />
+        <Route path="/success" element={<SuccessPage />} />
+        <Route path="*" element={<div>صفحه مورد نظر یافت نشد</div>} />
       </Routes>
     </Router>
   );

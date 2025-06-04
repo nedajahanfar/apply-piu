@@ -16,4 +16,5 @@ html, body, #root {
 
 body {
   background-color: var(--soft-color);
+  padding-top: 60px;
 }

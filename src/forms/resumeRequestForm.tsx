@@ -1,59 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { Accordion, Form, Button, Card } from "react-bootstrap";
-import fetchEuro  from "./fetchEuroPrice";
+import React, { useState } from "react";
+import { Form, Button, Card } from "react-bootstrap";
+import { useEuroPrice } from "../hooks/useEuroPrice";
 
-const ResumeRequestForm: React.FC = () => {
-  const [formData, setFormData] = useState({
-    fullNameFa: "",
-    fullNameEn: "",
-    phone: "",
-    address: "",
-    birthDate: "",
-    email: "",
-    education: "",
-    workExperience: "",
-    skills: "",
-    certificates: "",
-    projects: "",
-    languages: "",
-    photo: null as File | null,
-    additionalDocs: null as File | null,
-    receipt: null as File | null,
-  });
+const MotivationLetterForm: React.FC = () => {
 
- const [, setEuroPrice] = useState<number | null>(null);
- const [normalPrice, setNormalPrice] = useState<number | null>(null);
- const [urgentPrice, setUrgentPrice] = useState<number | null>(null);
-
- useEffect(() => {
-  const fetchPrice = async () => {
-    const euro = await fetchEuro();
-    if(euro) {
-      setEuroPrice(euro);
-      setNormalPrice(euro * 59);
-      setUrgentPrice(euro * 69);
-    }
+  type MotivationFormData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    transactionalId: string;
+    intro: string;
+    whyThisProgram: string;
+    strengthsAndSkills: string;
+    relevantExperience: string;
+    academicBackground: string;
+    achievements: string;
+    studyGoals: string;
+    professionalGoals: string;
+    whyThisCountry: string;
+    yourValueToProgram: string;
+    orderType: "normal" | "urgent";
   };
 
-  fetchPrice();
+  const [formData, setFormData] = useState<MotivationFormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    transactionalId: "",
+    intro: "",
+    whyThisProgram: "",
+    strengthsAndSkills: "",
+    relevantExperience: "",
+    academicBackground: "",
+    achievements: "",
+    studyGoals: "",
+    professionalGoals: "",
+    whyThisCountry: "",
+    yourValueToProgram: "",
+    orderType: "normal", 
+  });
 
-  const interval = setInterval(fetchPrice, 12 * 60 * 60 * 1000);
-  return () => clearInterval(interval);
- }, []);
+  const { price: euroPrice, error } = useEuroPrice();
+
+  const normalPrice = euroPrice ? euroPrice * 59 : null;
+  const urgentPrice = euroPrice ? euroPrice * 69 : null;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof typeof formData
-  ) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prevData) => ({ ...prevData, [field]: file }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,145 +60,196 @@ const ResumeRequestForm: React.FC = () => {
       dataToSend.append(key, (formData as any)[key]);
     }
 
-    await fetch("https://formspree.io/f/xrbqgkrz", {
-      method: "POST",
-      body: dataToSend,
-    });
+    try {
+      const response = await fetch("https://formspree.io/f/xrbqgkrz", {
+        method: "POST",
+        body: dataToSend,
+        headers: {
+          Accept: "application/json",
+        },
+      });
 
-    alert("فرم ارسال شد.");
+      if (!response.ok) {
+        const text = await response.text();
+        alert(`خطا در ارسال فرم: ${text}`);
+      } else {
+        alert("فرم ارسال شد.");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          transactionalId: "",
+          intro: "",
+          whyThisProgram: "",
+          strengthsAndSkills: "",
+          relevantExperience: "",
+          academicBackground: "",
+          achievements: "",
+          studyGoals: "",
+          professionalGoals: "",
+          whyThisCountry: "",
+          yourValueToProgram: "",
+          orderType: "normal",
+        });
+      }
+    } catch (err) {
+      alert(`خطا در ارسال فرم: ${err}`);
+    }
   };
 
-
   return (
-    <div className="container mt-4 mb-5 p-4 rounded bg-light" style={{ maxWidth: "800px" }}>
-      <h3 className="text-center mb-4">فرم درخواست نگارش رزومه</h3>
+    <div
+      className="container mt-4 mb-5 p-4 bg-light rounded"
+      dir="rtl"
+      style={{ maxWidth: "800px", paddingTop: "100px", marginTop: "60px" }}
+    >
+      <h3 className="text-center mb-4">فرم نگارش رزومه</h3>
 
-      <Card className="mb-3 p-3 bg-warning-subtle" dir="rtl">
+      <Card className="mb-3 p-3 bg-warning-subtle">
         <strong>📌 راهنما:</strong>
         <ul className="mb-0">
           <li>
-            بر اساس نرخ لحظه‌ای یورو، هزینه خدمات به شرح زیر محاسبه می‌شود:
+            مراحل پرداخت و ارسال فرم به شرح زیر است:
             <ul>
-              <li>هزینه نگارش رزومه (عادی): {normalPrice ? `${normalPrice.toLocaleString()} تومان` : "در حال دریافت..."} <br /> زمان تحویل: ۵ تا ۷ روز کاری</li>
-              <li>هزینه نگارش رزومه (فوری): {urgentPrice ? `${urgentPrice.toLocaleString()} تومان` : "در حال دریافت..."} <br /> زمان تحویل: ۲ تا ۳ روز کاری</li>
+              <li>
+                ۱. برای پرداخت هزینه، روی لینک زیر کلیک کنید و مبلغ را پرداخت
+                کنید:
+                <br />
+                <a
+                  href="https://zarinp.al/applypiu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  پرداخت از طریق زرین‌پرداخت
+                </a>
+              </li>
+              <li>۲. پس از پرداخت، کد تراکنش خود را کپی کنید.</li>
+              <li>۳. فرم را تکمیل کرده و کد را وارد کنید.</li>
+              <li>۴. سپس فرم را ارسال نمایید.</li>
+              <li>۵. با شما تماس گرفته خواهد شد.</li>
             </ul>
           </li>
           <li>
-            برای پرداخت، از لینک زیر استفاده کنید:
-            <br />
-            <a href="https://zarinp.al/applypiu" target="_blank" rel="noopener noreferrer">
-              پرداخت از طریق زرین‌پرداخت
-            </a>
-          </li>
-          <li>
-            پس از پرداخت، رسید را دانلود و در قسمت پایین فرم بارگذاری نمایید.
+            بر اساس نرخ لحظه‌ای یورو:
+            <ul>
+              <li>
+                سرویس عادی ( ۵ روز کاری):{" "}
+                {euroPrice
+                  ? `${normalPrice?.toLocaleString()} تومان`
+                  : error
+                  ? `خطا: ${error}`
+                  : "در حال دریافت..."}
+              </li>
+              <li>
+                سرویس فوری (۲ روز کاری):{" "}
+                {euroPrice
+                  ? `${urgentPrice?.toLocaleString()} تومان`
+                  : error
+                  ? `خطا: ${error}`
+                  : "در حال دریافت..."}
+              </li>
+            </ul>
           </li>
         </ul>
       </Card>
 
-      <Form onSubmit={handleSubmit} dir="rtl">
-        <Accordion defaultActiveKey="0" alwaysOpen>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>اطلاعات شخصی</Accordion.Header>
-            <Accordion.Body>
-              {[
-                { label: "نام و نام خانوادگی (فارسی)", name: "fullNameFa" },
-                { label: "نام و نام خانوادگی (انگلیسی)", name: "fullNameEn" },
-                { label: "شماره تماس", name: "phone", type: "tel" },
-                { label: "آدرس محل سکونت با کد پستی", name: "address" },
-                { label: "تاریخ تولد", name: "birthDate", type: "date" },
-                { label: "ایمیل", name: "email", type: "email" },
-              ].map(({ label, name, type = "text" }) => (
-                <Form.Group className="mb-3" key={name}>
-                  <Form.Label>{label}</Form.Label>
-                  <Form.Control
-                    name={name}
-                    type={type}
-                    value={(formData as any)[name]}
-                    onChange={handleChange}
-                    required={["fullNameFa", "fullNameEn", "phone", "email"].includes(name)}
-                  />
-                </Form.Group>
-              ))}
-            </Accordion.Body>
-          </Accordion.Item>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>نام</Form.Label>
+          <Form.Control
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
 
-          <Accordion.Item eventKey="1">
-            <Accordion.Header>سوابق تحصیلی و شغلی</Accordion.Header>
-            <Accordion.Body>
-              {[
-                { label: "سابقه تحصیلی", name: "education" },
-                { label: "تجربه کاری", name: "workExperience" },
-              ].map(({ label, name }) => (
-                <Form.Group className="mb-3" key={name}>
-                  <Form.Label>{label}</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name={name}
-                    value={(formData as any)[name]}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              ))}
-            </Accordion.Body>
-          </Accordion.Item>
+        <Form.Group className="mb-3">
+          <Form.Label>نام خانوادگی</Form.Label>
+          <Form.Control
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
 
-          <Accordion.Item eventKey="2">
-            <Accordion.Header>مهارت‌ها و مدارک</Accordion.Header>
-            <Accordion.Body>
-              {[
-                { label: "مهارت‌ها", name: "skills" },
-                { label: "گواهی دوره‌ها", name: "certificates" },
-                { label: "مقاله / پروژه", name: "projects" },
-                { label: "زبان‌ها + نمره آزمون", name: "languages" },
-              ].map(({ label, name }) => (
-                <Form.Group className="mb-3" key={name}>
-                  <Form.Label>{label}</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={2}
-                    name={name}
-                    value={(formData as any)[name]}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              ))}
-              <Form.Group className="mb-3">
-                <Form.Label>عکس ۳ در ۴</Form.Label>
-                <Form.Control
-                  type="file"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFileChange(e, "photo")}
-                />
-              </Form.Group>
-            </Accordion.Body>
-          </Accordion.Item>
+        <Form.Group className="mb-3">
+          <Form.Label>ایمیل</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
 
-          <Accordion.Item eventKey="3">
-            <Accordion.Header>آپلود مدارک و رسید پرداخت</Accordion.Header>
-            <Accordion.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>مدارک اضافی (اختیاری)</Form.Label>
-                <Form.Control
-                  type="file"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleFileChange(e, "additionalDocs")}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>رسید پرداخت</Form.Label>
-                <Form.Control
-                  type="file"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFileChange(e, "receipt")}
-                  required
-                />
-              </Form.Group>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+        <Form.Group className="mb-3">
+        <Form.Label>نوع سفارش</Form.Label>
+         <div>
+         <Form.Check
+          inline
+          type="radio"
+          label="عادی (تحویل ۵ روزه)"
+          name="orderType"
+          value="normal"
+          checked={formData.orderType === "normal"}
+          onChange={handleChange}
+        />
+       <Form.Check
+         inline
+         type="radio"
+         label="فوری (تحویل ۲ روزه)"
+         name="orderType"
+         value="urgent"
+         checked={formData.orderType === "urgent"}
+         onChange={handleChange}
+       />
+     </div>
+     </Form.Group>
 
-        <div className="text-center mt-4">
-          <Button variant="primary" type="submit">
+
+        <Form.Group className="mb-3">
+          <Form.Label>کد تراکنش</Form.Label>
+          <Form.Control
+            type="text"
+            name="transactionalId"
+            value={formData.transactionalId}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        {[
+          { name: "intro", label: "معرفی کامل خودتان و اهداف اپلای" },
+          { name: "whyThisProgram", label: "چرا این رشته و این مقطع تحصیلی؟" },
+          { name: "strengthsAndSkills", label: "نقاط قوت و مهارت‌های شما چیست؟" },
+          { name: "relevantExperience", label: "سوابق کاری یا پژوهشی مرتبط با رشته" },
+          { name: "academicBackground", label: "پیش‌زمینه علمی و درسی شما" },
+          { name: "achievements", label: "افتخارات و فعالیت‌های شاخص" },
+          { name: "studyGoals", label: "اهداف کوتاه‌مدت تحصیلی" },
+          { name: "professionalGoals", label: "اهداف بلندمدت شغلی و حرفه‌ای" },
+          { name: "whyThisCountry", label: "چرا این کشور را برای ادامه تحصیل انتخاب کردید؟" },
+          { name: "yourValueToProgram", label: "چه ارزشی برای برنامه/دانشگاه به ارمغان می‌آورید؟" },
+        ].map(({ name, label }) => (
+          <Form.Group className="mb-3" key={name}>
+            <Form.Label>{label}</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name={name}
+              value={(formData as any)[name]}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+        ))}
+
+        <div className="text-center">
+          <Button type="submit" variant="primary">
             ارسال فرم
           </Button>
         </div>
@@ -211,4 +258,4 @@ const ResumeRequestForm: React.FC = () => {
   );
 };
 
-export default ResumeRequestForm;
+export default MotivationLetterForm;

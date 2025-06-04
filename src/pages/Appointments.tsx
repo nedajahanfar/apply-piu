@@ -2,28 +2,18 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/appointments.css';
-import  fetchEuro  from '../forms/fetchEuroPrice'; 
+import { useEuroPrice } from '../hooks/useEuroPrice';
 
 const BookConsultation = () => {
   const [consultationType, setConsultationType] = useState<'normal' | 'technical'>('normal');
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'success' | 'failure' | 'Not the right amount'>('pending');
-  const [euroPrice, setEuroPrice] = useState<number | null>(null);
 
   const { t } = useTranslation();
   const location = useLocation();
 
+  const { price: euroPrice, error } = useEuroPrice();
   const euroBasePrice = consultationType === 'normal' ? 10 : 30;
-  const localCurrencyPrice = euroPrice ? (euroPrice * euroBasePrice) : null;
-
-  useEffect(() => {
-    const fetchPrice = async () => {
-      const price = await fetchEuro();
-      console.log('💸 Final Euro price:', price);
-      setEuroPrice(price);
-    };
-  
-    fetchPrice();
-  }, []);
+  const localCurrencyPrice = euroPrice ? euroPrice * euroBasePrice : null;
 
   const handleConsultationChange = (type: 'normal' | 'technical') => {
     setConsultationType(type);
@@ -34,16 +24,29 @@ const BookConsultation = () => {
     const paymentStatusFromUrl = params.get('status');
     const amountPaid = params.get('amount');
 
-    if (paymentStatusFromUrl) {
-      if (paymentStatusFromUrl === 'success') {
-        if (amountPaid && localCurrencyPrice && Number(amountPaid) === localCurrencyPrice) {
+    if (paymentStatusFromUrl === 'success') {
+      if (amountPaid && localCurrencyPrice) {
+        const roundedPaid = Math.round(Number(amountPaid));
+        const expectedRounded = Math.round(localCurrencyPrice);
+
+        if (roundedPaid === expectedRounded) {
           setPaymentStatus('success');
         } else {
-          setPaymentStatus('Not the right amount');
+          setPaymentStatus('success'); // Still show calendar
+          // Send warning email
+          fetch("https://formspree.io/f/your-form-id", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message: `Warning: A user paid ${roundedPaid} Toman but expected was ${expectedRounded} Toman. Please verify the booking manually.`,
+            }),
+          });
         }
       } else {
         setPaymentStatus('failure');
       }
+    } else if (paymentStatusFromUrl === 'failure') {
+      setPaymentStatus('failure');
     }
   }, [location.search, localCurrencyPrice]);
 
@@ -79,6 +82,8 @@ const BookConsultation = () => {
             </button>
           </div>
 
+          {error && <p className="text-red-600">{t("bookConsultation.errorFetchingPrice")}</p>}
+
           {localCurrencyPrice !== null ? (
             <div className="bg-blue-800 p-4 rounded-lg inline-block mb-4">
               <p className="text-lg font-semibold">
@@ -87,7 +92,7 @@ const BookConsultation = () => {
                 })}
               </p>
               <p className="text-xl font-bold">
-                {localCurrencyPrice} Toman
+                {localCurrencyPrice.toLocaleString()} Toman
               </p>
             </div>
           ) : (
@@ -124,12 +129,6 @@ const BookConsultation = () => {
       {paymentStatus === 'failure' && (
         <div className="mb-8 text-red-600">
           <h2>{t("bookConsultation.paymentFailure")}</h2>
-        </div>
-      )}
-
-      {paymentStatus === 'Not the right amount' && (
-        <div className="mb-8 text-red-600">
-          <h2>{t("bookConsultation.incorrectAmount")}</h2>
         </div>
       )}
     </div>

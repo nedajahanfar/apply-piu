@@ -86,55 +86,28 @@ function MentorshipForm() {
             تمدید ماهانه از ماه سوم، با پرداخت ۱۲۰ یورو، حداکثر ۱۰ روز قبل از پایان ماه.
           </p>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">نام کامل</label>
-              <input type="text" name="name" className="form-control" required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">ایمیل</label>
-              <input type="email" name="email" className="form-control" required />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">اهداف یا سوالات شما</label>
-              <textarea name="message" rows={4} className="form-control" required></textarea>
-            </div>
+          <form>
+           <p className="mb-4 text-center" style={{ lineHeight: '1.9' }}>
+          به دلیل محدودیت‌های فنی، لطفاً برای درخواست منتورشیپ، فایل‌های زیر را از طریق ایمیل ارسال کنید:
+          <br/>
+          <strong>✔️ رزومه (CV) + انگیزه‌نامه</strong>
+          <br /><br />
+          بعد از بررسی مدارک، در صورت پذیرش برای منتورشیپ با شما تماس گرفته خواهد شد.
+           </p>
 
-            <div className="mb-3">
-              <label className="form-label">رزومه (CV)</label>
-              <input
-                required
-                type="file"
-                name="cv"
-                className="form-control"
-                onChange={(e) => handleFileChange(e, setCvFile)}
-                accept=".pdf, .doc, .docx"
-              />
-            </div>
-
-
-            <div className="mb-3">
-              <label className="form-label">انگیزه نامه</label>
-              <input
-                type="file"
-                name="motivationLetter"
-                className="form-control"
-                onChange={(e) => handleFileChange(e, setMotivationLetterFile)}
-                accept=".pdf, .doc, .docx"
-              />
-            </div>
-
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary">ارسال درخواست</button>
-            </div>
-
-            {status === 'SUCCESS' && <p className="text-success mt-3 text-center">✅ درخواست با موفقیت ارسال شد.</p>}
-            {status === 'ERROR' && <p className="text-danger mt-3 text-center">❌ مشکلی در ارسال درخواست رخ داد.</p>}
+           <div className="text-center">
+          <a
+           href="mailto:applypu@gmail.com?subject=درخواست منتورشیپ"
+           className="btn btn-primary" >
+           ارسال ایمیل به applypu@gmail.com
+          </a>
+        </div>
           </form>
-        </Container>
-      </section>
 
-      <Footer />
+         </Container>
+        </section>
+
+       <Footer />
     </>
   );
 }
