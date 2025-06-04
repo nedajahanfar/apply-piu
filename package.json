@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && cp -R public/locales dist/locales",
+    "build": "vite build && cp -R src/locales dist/locales",
     "lint": "node --import eslint.config.mjs ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "node --import eslint.config.mjs ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx --fix",
     "preview": "vite preview"
