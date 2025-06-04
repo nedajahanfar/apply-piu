@@ -2,7 +2,7 @@ import { Container } from 'react-bootstrap';
 import homeBg from '../assets/homeBg.jpg';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import '../styles/home.css'
+import '../styles/Home.css'
 
 const Home = () => {
   const { t, i18n } = useTranslation(); 
